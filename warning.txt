@@ -1,0 +1,7 @@
+
+cache_trasher: You have attempted to remove your entire public directory.  
+If you want the ability to clear your entire cache directory, you will need to change
+the directory that your application stores cached pages in.  You can do this by adding
+config.action_controller.page_cache_directory = RAILS_ROOT+"/public/<your-dir-name>/" 
+to environment.rb.  For more information, see the cache_trasher documentation.
+

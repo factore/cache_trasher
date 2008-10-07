@@ -1,0 +1,33 @@
+cache_trasher
+============
+
+When using page caching, often you'll need to expire several pages in several locations at once.  cache_trasher provides a simple method for 
+bulk-deleting cached pages via action, controller, or direct path.
+
+Example
+=======
+
+cache_trasher should be used in place of expire_page in your cache sweepers.
+
+  class PageSweeper < ActionController::Caching::Sweeper
+    observe Page
+    
+    def after_save(page)
+      # deletes public/pages and public/pages.html (if it exists)
+      trash_cache(:controller => "pages")
+      
+      # deletes public/pages/view and public/pages/view.html (if it exists)
+      trash_cache(:controller => "pages", :action => "view")
+      
+      # deletes public/pages/index.html
+      trash_cache("index")
+      
+      # deletes your entire cache provided config.action_controller.page_cache_directory is not your public directory
+      trashes_cache()
+    end
+  end
+
+Note that trash_cache will never delete your entire public directory or everything in your public directory.  However, it will delete pretty much anything else 
+you tell it to regardless of whether or not it's actually a cached file, so be careful!
+
+Copyright (c) 2008 factor[e] design initiative, released under the MIT license
