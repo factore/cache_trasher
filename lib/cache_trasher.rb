@@ -14,7 +14,7 @@ module ActionController::Caching::Pages
         p = page_cache_directory + p
         unless [p, p.chomp, p.chomp('/'), p.chomp('/*')].include? Rails.public_path 
           benchmark "Removing cache file or directory: #{p}" do
-            FileUtils.rm_r(p)
+            FileUtils.rm_r(p) rescue Errno::ENOENT
           end
         else
           # drop a long message into the log if they try to delete RAILS_ROOT/public
