@@ -18,8 +18,14 @@ cache_trasher should be used in place of expire_page in your cache sweepers.
       # deletes public/pages/view and public/pages/view.html (if it exists)
       trash_cache(:controller => "pages", :action => "view")
       
-      # deletes public/pages/index.html
+      # deletes public/index.html
       trash_cache("index")
+      
+      # deletes public/bio.js
+      trash_cache("bio", :format => :js)
+      
+      # deletes public/bio.js and public/bio.html
+      trash_cache("bio", :format => [:js, :html])
       
       # deletes your entire cache provided config.action_controller.page_cache_directory is not your public directory
       trashes_cache()
