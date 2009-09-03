@@ -4,7 +4,6 @@ module ActionController::Caching::Pages
   
     def trash_cache(path, options)
       return unless perform_caching
-      
       # check if the action or controller has been saved as a cached file
       # as opposed to just a directory.
       paths = [path.chomp('/')]
@@ -36,7 +35,14 @@ module ActionController::Caching::Pages
     
     path = case supplied_path
     when Hash
-      url_for(options.merge(:only_path => true, :skip_relative_url_root => true))
+      # Note this part of the url_for documentation:
+      # 
+      # If the controller name begins with a slash no defaults are used:
+      # url_for :controller => '/home'
+      # In particular, a leading slash ensures no namespace is assumed. Thus, while url_for :controller => 'users' 
+      # may resolve to Admin::UsersController if the current controller lives under that module, url_for :controller => '/users' 
+      # ensures you link to ::UsersController no matter what.
+      url_for(supplied_path.merge(:only_path => true, :skip_relative_url_root => true))
     when String
       supplied_path
     end
