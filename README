@@ -13,13 +13,29 @@ cache_trasher should be used in place of expire_page in your cache sweepers.
     
     def after_save(page)
       # deletes public/pages and public/pages.html (if it exists)
-      trash_cache(:controller => "pages")
+      # note that this uses url_for, so the documentation for url_for paths applies:
+      # 
+      # If the controller name begins with a slash no defaults are used:
+      # url_for :controller => '/home'
+      # In particular, a leading slash ensures no namespace is assumed. Thus, while url_for :controller => 'users' 
+      # may resolve to Admin::UsersController if the current controller lives under that module, url_for :controller => '/users' 
+      # ensures you link to ::UsersController no matter what.
+      trash_cache(:controller => "pages") # => may resolve to admin/pages if there happens to be a pages controller in the admin namespace
+      
+      # ensure no namespace when trashing the pages cache
+      trash_cache(:controller => "/pages")
       
       # deletes public/pages/view and public/pages/view.html (if it exists)
       trash_cache(:controller => "pages", :action => "view")
       
-      # deletes public/pages/index.html
+      # deletes public/index.html
       trash_cache("index")
+      
+      # deletes public/bio.js
+      trash_cache("bio", :format => :js)
+      
+      # deletes public/bio.js and public/bio.html
+      trash_cache("bio", :format => [:js, :html])
       
       # deletes your entire cache provided config.action_controller.page_cache_directory is not your public directory
       trashes_cache()

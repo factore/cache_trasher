@@ -4,6 +4,7 @@ module ActionController::Caching::Pages
   
     def trash_cache(path, options)
       puts "[CacheTrasher] ActionController::Base.perform_caching is disabled, exiting." and return unless perform_caching
+
       # check if the action or controller has been saved as a cached file
       # as opposed to just a directory.
       paths = [path.chomp('/')]
